@@ -22,7 +22,7 @@ class SnoothClientTest extends \PHPUnit_Framework_TestCase
      * $reflection
      * @var object
      */
-    protected $reflection;
+    protected $reflection = null;
 
     public function setUp()
     {
@@ -61,18 +61,17 @@ class SnoothClientTest extends \PHPUnit_Framework_TestCase
 
     public function testSetUrlSucceeds()
     {
-        $actual = $this->snoothClient->setUrl('getTheUnitTestMethod', 'ExpectedResult');
+        $actual = $this->snoothClient->setUrl('getTheUnitTestMethod');
         $key = self::VALID_KEY ? self::VALID_KEY : self::TEST_KEY;
-        $expected = 'https://api.snooth.com/getTheUnitTestMethod/ExpectedResult/&akey='.$key.'&format=json';
+        $expected = 'https://api.snooth.com/getTheUnitTestMethod/?akey='.$key.'&format=json';
         $this->assertEquals($expected, $this->getProperty('url'));
     }
 
     public function testGeturlSucceeds()
     {
-        $actual = $this->snoothClient->setUrl('getTheUnitTestMethod', 'ExpectedResult');
+        $actual = $this->snoothClient->setUrl('getTheUnitTestMethod');
         $key = self::VALID_KEY ? self::VALID_KEY : self::TEST_KEY;
-        $expected = 'http://api.snooth.cc/rest/v1.0/getTheUnitTestMethod/ExpectedResult/&key='.$key.'&format=json';
-        $expected = 'https://api.snooth.com/getTheUnitTestMethod/ExpectedResult/&akey='.$key.'&format=json';
+        $expected = 'https://api.snooth.com/getTheUnitTestMethod/?akey='.$key.'&format=json';
         $this->assertEquals($expected, $this->snoothClient->getUrl());
     }
 
@@ -82,7 +81,7 @@ class SnoothClientTest extends \PHPUnit_Framework_TestCase
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_FAILONERROR => true,
             CURLOPT_URL => '',
-            CURLOPT_USERAGENT => 'Websoftwares snooth PHP api client'
+            CURLOPT_USERAGENT => 'Websoftwares Snooth PHP api client'
         );
         $method = $this->getMethod('getCurlOptions');
         $actual = $method->invoke($this->snoothClient);
@@ -91,7 +90,7 @@ class SnoothClientTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBaseUrlSucceeds()
     {
-        $expected = "http://api.snooth.cc/rest";
+        $expected = "https://api.snooth.com/";
         $method = $this->getMethod('getBaseUrl');
         $actual = $method->invoke($this->snoothClient);
         $this->assertEquals($expected,$actual);
@@ -107,8 +106,8 @@ class SnoothClientTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGetClearParameterSucceeds()
     {
-        $expected  = array('PHPUnit' => 'Test', 'key' => self::VALID_KEY ? self::VALID_KEY : self::TEST_KEY, 'format' => 'json');
-        $cleared = array('key' => self::VALID_KEY ? self::VALID_KEY : self::TEST_KEY, 'format' => 'json');
+        $expected  = array('PHPUnit' => 'Test', 'akey' => self::VALID_KEY ? self::VALID_KEY : self::TEST_KEY, 'format' => 'json');
+        $cleared = array('akey' => self::VALID_KEY ? self::VALID_KEY : self::TEST_KEY, 'format' => 'json');
 
         $this->snoothClient->setParameter('PHPUnit', 'Test');
         $method = $this->getMethod('getParameter');
@@ -118,12 +117,48 @@ class SnoothClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($cleared,$method->invoke($this->snoothClient));
     }
 
+    public function testSetCurlOptionSucceeds()
+    {
+        $expected = array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_FAILONERROR => true,
+            CURLOPT_URL => '',
+            CURLOPT_USERAGENT => 'Websoftwares Snooth PHP api client',
+            CURLOPT_POST => 1,
+            CURLOPT_POSTFIELDS => array('testName', 'value')
+            );
+
+         $this->snoothClient
+            ->setCurlOption(CURLOPT_POST, 1)
+            ->setCurlOption(CURLOPT_POSTFIELDS, array('testName', 'value'));
+
+        $method = $this->getMethod('getCurlOptions');
+        $actual = $method->invoke($this->snoothClient);
+        $this->assertEquals($expected,$actual);
+    }
+
     /**
      * @expectedException Websoftwares\snoothException
      */
     public function testInstantiateAsObjectFails()
     {
         new snoothClient;
+    }
+
+    /**
+     * @expectedException Websoftwares\snoothException
+     */
+    public function testSetUrlFails()
+    {
+        $this->snoothClient->setUrl();
+    }
+
+    /**
+     * @expectedException Websoftwares\snoothException
+     */
+    public function testSetUrlInvalidMethodFails()
+    {
+        $this->snoothClient->setUrl('invalidMethod');
     }
 
     public function getMethod($method)

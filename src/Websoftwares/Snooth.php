@@ -13,26 +13,26 @@ namespace Websoftwares;
  */
 class Snooth
 {
-	/**
-	 * $client
-	 * @var object
-	 */
-	private $client = null;
-	/**
-	 * $debug
-	 * @var boolean
-	 */
-	private $debug = false;
+    /**
+     * $client
+     * @var object
+     */
+    private $client = null;
+    /**
+     * $debug
+     * @var boolean
+     */
+    private $debug = false;
 
-	public function __construct(SnoothInterface $client = null, $debug = true)
-	{
+    public function __construct(SnoothInterface $client = null, $debug = true)
+    {
         if (! $client) {
             throw new SnoothException('A client must be provided');
         }
 
         $this->client = $client;
         $this->debug = $debug;
-	}
+    }
 
     /**
      * __call overloading client methods

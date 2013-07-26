@@ -13,7 +13,7 @@ namespace Websoftwares;
  */
 class SnoothClient implements SnoothInterface
 {
-	/**
+    /**
      * @var string
      */
     protected $baseUrl = "https://api.snooth.com/";
@@ -64,26 +64,56 @@ class SnoothClient implements SnoothInterface
     }
 
     /**
-     * curlOptions
+     * setCurlOption
      *
-     * @param string $option
-     * @param string $value
+     * @param  string $option
+     * @param  string $value
      * @return self
      */
-    public function setCurlOptions($option = null, $value = null)
+    public function setCurlOption($option = null, $value = null)
     {
         $this->curlOptions[$option] = $value;
+
         return $this;
     }
 
     /**
      * setUrl
+     *
+     * @param  string $method
      * @return string
      */
-    public function setUrl($method)
+    public function setUrl($method = null)
     {
+        // See if api method is set
+        if (! $method) {
+            throw new SnoothException('Please provide a valid Api method');
+        }
+
+        // Check if api method is valid
+        $validMethods  = array(
+            'wines',
+            'create-account',
+            'rate',
+            'wishlist',
+            'wine',
+            'my-wines',
+            'stores',
+            'store',
+            'winery',
+            'action',
+            'getTheUnitTestMethod'
+            );
+
+        if (! in_array($method, $validMethods)) {
+            throw new SnoothException($method . ' is not valid, please provide a valid Api method');
+        }
+
         // Create url
         $this->url = $this->getBaseUrl() . $method . '/?' . $this->buildQueryString($this->getParameter());
+        // Add to curl options
+        $this->setCurlOption(CURLOPT_URL, $this->url);
+
         return $this;
     }
 
@@ -132,7 +162,7 @@ class SnoothClient implements SnoothInterface
         $current = $this->getParameter();
 
         $this->parameter = array(
-            'key' => isset($current['key']) ? $current['key'] : null,
+            'akey' => isset($current['akey']) ? $current['akey'] : null,
             'format' => isset($current['format']) ? $current['format'] : null,
         );
 

@@ -31,7 +31,7 @@ interface SnoothInterface
     /**
      * setUrl
      */
-    public function setUrl($method, $argument = null);
+    public function setUrl($method);
 
     /**
      * getUrl returns url

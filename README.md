@@ -34,14 +34,14 @@ php composer.phar install
 ## Usage
 Below u find a list with available methods.
 
-## GetWineByAvin
-Gets a wine by Avin.
+## setParameter
+Please read the [documentation](https://api.snooth.com/ "api.snooth.com") for a complete list of available paramaters for each method.
 
 ```php
-use Websoftwares\AvinClient, Websoftwares\Avin;
+use Websoftwares\SnoothClient, Websoftwares\Snooth;
 
-$avin = new Avin(new AvinClient('123456789YourApiKey'));
-$avin->GetWineByAvin('AVIN0123456789012');
+$snooth = new Snooth(new SnoothClient('123456789YourApiKey'));
+$snooth->setParameter('a', 0)
 
 ```
 
@@ -49,14 +49,14 @@ $avin->GetWineByAvin('AVIN0123456789012');
 Use try/catch block to get error message.
 
 ```php
-use Websoftwares\AvinClient,
-	Websoftwares\Avin,
-	Websoftwares\AvinException;
+use Websoftwares\SnoothClient,
+	Websoftwares\Snooth,
+	Websoftwares\SnoothException;
 
 try {
-	$avin = new Avin(new AvinClient('123456789YourApiKey'));
-	$avin->GetWinesByName('Era');
-} catch (AvinException $e) {
+	$snooth = new Snooth(new SnoothClient('123456789YourApiKey'));
+	$snooth->getWines('Era');
+} catch (SnoothException $e) {
 	echo $e->getMessage();
 }
 
