@@ -1,5 +1,5 @@
 <?php
-use Websoftwares\SnoothClient;
+use Websoftwares\SnoothClient, Websoftwares\SnoothException;
 /**
  * Class SnoothClientTest
  * Provide a valid api key to test the 'online' tests.
@@ -138,27 +138,11 @@ class SnoothClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Websoftwares\snoothException
+     * @expectedException Websoftwares\SnoothException
      */
     public function testInstantiateAsObjectFails()
     {
         new snoothClient;
-    }
-
-    /**
-     * @expectedException Websoftwares\snoothException
-     */
-    public function testSetUrlFails()
-    {
-        $this->snoothClient->setUrl();
-    }
-
-    /**
-     * @expectedException Websoftwares\snoothException
-     */
-    public function testSetUrlInvalidMethodFails()
-    {
-        $this->snoothClient->setUrl('invalidMethod');
     }
 
     public function getMethod($method)

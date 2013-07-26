@@ -85,32 +85,16 @@ class SnoothClient implements SnoothInterface
      */
     public function setUrl($method = null)
     {
-        // See if api method is set
-        if (! $method) {
-            throw new SnoothException('Please provide a valid Api method');
-        }
+        $parameters = $this->getParameter();
 
-        // Check if api method is valid
-        $validMethods  = array(
-            'wines',
-            'create-account',
-            'rate',
-            'wishlist',
-            'wine',
-            'my-wines',
-            'stores',
-            'store',
-            'winery',
-            'action',
-            'getTheUnitTestMethod'
-            );
-
-        if (! in_array($method, $validMethods)) {
-            throw new SnoothException($method . ' is not valid, please provide a valid Api method');
+        // Only send plain password if account is being created else hash md5.
+        // @todo question snooth if md5 is used as password salt ? or only to transmit?
+        if ($method !== 'create-account' && isset($parameters['p'])) {
+            $parameters['p'] = md5($parameters['p']);
         }
 
         // Create url
-        $this->url = $this->getBaseUrl() . $method . '/?' . $this->buildQueryString($this->getParameter());
+        $this->url = $this->getBaseUrl() . $method . '/?' . $this->buildQueryString($parameters);
         // Add to curl options
         $this->setCurlOption(CURLOPT_URL, $this->url);
 
@@ -208,12 +192,19 @@ class SnoothClient implements SnoothInterface
 
         // Execute and save response to $response
         if (!$response = curl_exec($curl)) {
-            throw new AvinException('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
+            throw new SnoothException('Error: "' . curl_error($curl) . '" - Code: ' . curl_errno($curl));
         }
 
         // Close request to clear up some resources
         curl_close($curl);
 
-        return $result;
+        $response = json_decode($response);
+
+        // Invalid response
+        if ($response->meta->status === 0) {
+            throw new SnoothException($response->meta->errmsg);
+        }
+
+        return $response;
     }
 }

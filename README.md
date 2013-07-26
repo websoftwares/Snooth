@@ -31,22 +31,9 @@ Install via composer
 php composer.phar install
 ```
 
-## Usage
-Below u find a list with available methods.
+## Example Usage
+Please read the [documentation](https://api.snooth.com/ "api.snooth.com") for a complete list of available methods and paramaters.
 
-## setParameter
-Please read the [documentation](https://api.snooth.com/ "api.snooth.com") for a complete list of available paramaters for each method.
-
-```php
-use Websoftwares\SnoothClient, Websoftwares\Snooth;
-
-$snooth = new Snooth(new SnoothClient('123456789YourApiKey'));
-$snooth->setParameter('a', 0)
-
-```
-
-## Error message
-Use try/catch block to get error message.
 
 ```php
 use Websoftwares\SnoothClient,
@@ -55,7 +42,13 @@ use Websoftwares\SnoothClient,
 
 try {
 	$snooth = new Snooth(new SnoothClient('123456789YourApiKey'));
-	$snooth->getWines('Era');
+
+	$response = $snooth
+		// Set parameters for method
+		->setParameter('a', 0)
+		// Get response for this method on the snooth api
+		->api('wines');
+
 } catch (SnoothException $e) {
 	echo $e->getMessage();
 }
