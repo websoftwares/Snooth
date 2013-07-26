@@ -31,32 +31,25 @@ Install via composer
 php composer.phar install
 ```
 
-## Usage
-Below u find a list with available methods.
+## Example Usage
+Please read the [documentation](https://api.snooth.com/ "api.snooth.com") for a complete list of available methods and paramaters.
 
-## GetWineByAvin
-Gets a wine by Avin.
 
 ```php
-use Websoftwares\AvinClient, Websoftwares\Avin;
-
-$avin = new Avin(new AvinClient('123456789YourApiKey'));
-$avin->GetWineByAvin('AVIN0123456789012');
-
-```
-
-## Error message
-Use try/catch block to get error message.
-
-```php
-use Websoftwares\AvinClient,
-	Websoftwares\Avin,
-	Websoftwares\AvinException;
+use Websoftwares\SnoothClient,
+	Websoftwares\Snooth,
+	Websoftwares\SnoothException;
 
 try {
-	$avin = new Avin(new AvinClient('123456789YourApiKey'));
-	$avin->GetWinesByName('Era');
-} catch (AvinException $e) {
+	$snooth = new Snooth(new SnoothClient('123456789YourApiKey'));
+
+	$response = $snooth
+		// Set parameters for method
+		->setParameter('a', 0)
+		// Get response for this method on the snooth api
+		->api('wines');
+
+} catch (SnoothException $e) {
 	echo $e->getMessage();
 }
 
