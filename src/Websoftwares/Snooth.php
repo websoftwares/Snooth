@@ -40,7 +40,7 @@ class Snooth
      * @param  string $method the avin number
      * @return object
      */
-    public function api($method = null)
+    public function get($method = null)
     {
         // See if api method is set
         if (! $method) {

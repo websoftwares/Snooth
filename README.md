@@ -42,9 +42,8 @@ use Websoftwares\SnoothClient,
 
 try {
 	$snooth = new Snooth(new SnoothClient('123456789YourApiKey'));
-
-	// Set parameters for method and get response for this method on the snooth api
-	$response = $snooth->setParameter('a', 0)->api('wines');
+	// Set parameters for method and get response
+	$response = $snooth->setParameter('a', 0)->get('wines');
 
 } catch (SnoothException $e) {
 	echo $e->getMessage();

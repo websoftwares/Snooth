@@ -50,7 +50,7 @@ class SnoothTest extends \PHPUnit_Framework_TestCase
     public function testApiMethodSucceeds()
     {
         if ($this->debug) {
-            $actual = $this->snooth->api('wines');
+            $actual = $this->snooth->get('wines');
             $expected = 'https://api.snooth.com/wines/?akey=123456789UnitTestKey&format=json';
             $this->assertEquals($expected,$actual);
 
@@ -72,16 +72,16 @@ class SnoothTest extends \PHPUnit_Framework_TestCase
                 ->setParameter('mr', 0)
                 ->setParameter('xr', 3)
                 ->setParameter('lang', 'de')
-                ->api('wines');
+                ->get('wines');
 
             $this->assertEquals($expected . '&q=Riesling&f=1&n=100&a=0&t=wine&color=white&m=7777777&c=Germany&z=12000&lat=50.901737&lng=10.986595&s=price%2Bdesc&mp=10.99&mx=99&mr=0&xr=3&lang=de', $parameters);
 
-            $reset = $this->snooth->clearParameter()->api('wines');
+            $reset = $this->snooth->clearParameter()->get('wines');
             $this->assertEquals($expected, $reset);
 
         } else {
             $expected = 'stdClass';
-            $actual = $this->snooth->api('wines');
+            $actual = $this->snooth->get('wines');
             $this->assertObjectHasAttribute('wines', $actual);
             $this->assertInstanceOf($expected, $actual);
         }
@@ -106,7 +106,7 @@ class SnoothTest extends \PHPUnit_Framework_TestCase
      */
     public function testApiFails()
     {
-        $this->snooth->api();
+        $this->snooth->get();
     }
 
     /**
@@ -114,7 +114,7 @@ class SnoothTest extends \PHPUnit_Framework_TestCase
      */
     public function testApiMethodFails()
     {
-        $this->snooth->api('invalidMethod');
+        $this->snooth->get('invalidMethod');
     }
 
     /**
